@@ -19,10 +19,10 @@ class SDLCWorkflowNode:
         print("generate_user_stories=")
         if(state["product_owner_accept_reject_stories"]=="Rejected"):
             sys_msg = SystemMessage(content=f"You are an exprienced product owner in scrum methodology. Use your expertise, to generate user stories for the provided project but take into account the feedback: {state['product_owner_stories_feedback']}")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}")
         else:
             sys_msg = SystemMessage(content="You are an exprienced product owner in scrum methodology. Use your expertise, to generate user stories for the provided project.")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_generated_stories"] = llm_response.content
@@ -56,10 +56,10 @@ class SDLCWorkflowNode:
                 
         if(state["llm_accept_reject_design"]=="Rejected"):
             sys_msg = SystemMessage(content=f"You are an exprienced software architect. Use your expertise, to generate detailed design of the provided project but take into account the feedback: {state['llm_design_feedback']}")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, user stories : {state["llm_generated_stories"]}, current design : {state["llm_generated_design_docs"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, user stories : {state['llm_generated_stories']}, current design : {state['llm_generated_design_docs']}")
         else:
             sys_msg = SystemMessage(content="You are an exprienced software architect. Use your expertise, to generate detailed design of the provided project. The design should be based on the user stories.")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, user stories : {state["llm_generated_stories"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, user stories : {state['llm_generated_stories']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_generated_design_docs"] = llm_response.content
@@ -95,10 +95,10 @@ class SDLCWorkflowNode:
        
         if(state["llm_accept_reject_code"]=="Rejected"):
             sys_msg = SystemMessage(content=f"You are an exprienced software developer. Use your expertise, to write code for the provided project but take into account the feedback: {state['llm_code_feedback']}")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, current design : {state["llm_generated_design_docs"]}, current code : {state["llm_generated_code"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, current design : {state['llm_generated_design_docs']}, current code : {state['llm_generated_code']}")
         else:
             sys_msg = SystemMessage(content="You are an exprienced software developer. Use your expertise, to write code for the provided project. The code should in java and based on detailed desgin.")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, project detailed design : {state["llm_generated_design_docs"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, project detailed design : {state['llm_generated_design_docs']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_generated_code"] = llm_response.content
@@ -153,10 +153,10 @@ class SDLCWorkflowNode:
             
         if(state["llm_accept_reject_test_cases"]=="Rejected"):
             sys_msg = SystemMessage(content=f"You are an exprienced software tester. Use your expertise, to write test cases for the provided project but take into account the feedback: {state['llm_test_cases_feedback']}")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, current code : {state["llm_generated_code"]}, current test cases : {state["llm_generated_test_cases"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, current code : {state['llm_generated_code']}, current test cases : {state['llm_generated_test_cases']}")
         else:
             sys_msg = SystemMessage(content="You are an exprienced software tester. Use your expertise, to write test cases for the provided project. The test cases should be based on project code.")
-            hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, project code : {state["llm_generated_code"]}")
+            hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, project code : {state['llm_generated_code']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_generated_test_cases"] = llm_response.content
@@ -188,7 +188,7 @@ class SDLCWorkflowNode:
         print("perform_qa_testing is called")
             
         sys_msg = SystemMessage(content="You are a experienced QA Engineer. Use your expertise, to perform QA testing of the provided project. The QA testing should be based on project code and test cases.")
-        hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, project code : {state["llm_generated_code"]}, test cases : {state["llm_generated_test_cases"]}")
+        hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, project code : {state['llm_generated_code']}, test cases : {state['llm_generated_test_cases']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_qa_feedback"] = llm_response.content
@@ -199,7 +199,7 @@ class SDLCWorkflowNode:
         print("llm_deployment is called")
             
         sys_msg = SystemMessage(content="You are a experienced DevOps Engineer. Use your expertise, to write detailed instructions to deploy the provided project code. Our perference of deployment is on Docker and Kubernetes envirnment.")
-        hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, project code : {state["llm_generated_code"]}")
+        hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, project code : {state['llm_generated_code']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_deploy_instructions"] = llm_response.content
@@ -210,7 +210,7 @@ class SDLCWorkflowNode:
         print("llm_monitoring is called")
             
         sys_msg = SystemMessage(content="You are a experienced DevOps Engineer. Use your expertise, to write detailed instructions on monitoring deployed app on docker and kubernetes environment. We want details about logs, alerts and oberserability setup.")
-        hum_msg = HumanMessage(content=f"project title : {state["project_title"]}, project requirements : {state["project_requirements"]}, project code : {state["llm_generated_code"]}, deployment : {state["llm_deploy_instructions"]}")
+        hum_msg = HumanMessage(content=f"project title : {state['project_title']}, project requirements : {state['project_requirements']}, project code : {state['llm_generated_code']}, deployment : {state['llm_deploy_instructions']}")
         
         llm_response = self.llm.invoke([sys_msg] + [hum_msg])
         state["llm_monitoring_instructions"] = llm_response.content
