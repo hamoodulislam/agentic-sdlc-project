@@ -140,7 +140,8 @@ def load_langgraph_agenticai_app():
 
         **Workflow:** See the image below for details of workflow steps.
         """
-        st.markdown(intro) 
+        st.markdown(intro)
+        st.image("softwareLifeCycle.jpeg", caption="Software Development Life Cycle (SDLC) Workflow") 
         
 
                 
