@@ -75,7 +75,7 @@ class SDLCWorkflowNode:
         grade = evaluator.invoke(f"As an experienced software architect evaluate the project design : {state['llm_generated_design_docs']}")
         #print("grade=",grade)
         state["llm_accept_reject_design"] = grade.grade 
-        state["product_owner_stories_feedback"] = grade.feedback
+        state["llm_design_feedback"] = grade.feedback
         return state
 
     def llm_design_review_should_continue(self, state: State):
