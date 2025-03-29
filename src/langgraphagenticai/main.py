@@ -71,25 +71,31 @@ def load_langgraph_agenticai_app():
                 # Content for each tab
                 with tab1:
                     st.write(final_state["llm_generated_stories"])
-                    col1, col2, col3 = st.columns(3)
-                    with col1:
-                       st.write('final_state')
-                    with col2:
-                        if st.button("Provide Feedback", key="Feedback1"):
-                            st.write("Feedback provided.")
-
+                    st.divider()                    
+                    st.markdown("**Product Owner Decision** : " + final_state["product_owner_accept_reject_stories"])
+                    st.markdown("**Product Owner Feedback** : " + final_state["product_owner_stories_feedback"])
+                    
                 with tab2:
                     st.write(final_state["llm_generated_design_docs"])                    
+                    st.divider()                    
+                    st.markdown("**LLM Design Review Decision** : " + final_state["llm_accept_reject_design"])
+                    st.markdown("**LLM Design Review Feedback** : " + final_state["llm_design_feedback"])
                     
                 with tab3:
-                    st.write(final_state["llm_generated_code"])                     
-                    
+                    st.write(final_state["llm_generated_code"])
+                    st.divider()                    
+                    st.markdown("**LLM Code Review Decision** : " + final_state["llm_accept_reject_code"])
+                    st.markdown("**LLM Code Review Feedback** : " + final_state["llm_code_feedback"])                     
+                   
                 with tab4:
                     st.write(final_state["llm_security_feedback"])
                     
                 with tab5:
                     st.write(final_state["llm_generated_test_cases"])
-                    
+                    st.divider()                    
+                    st.markdown("**LLM Test Cases Review Decision** : " + final_state["llm_accept_reject_test_cases"])
+                    st.markdown("**LLM Test Cases Review Feedback** : " + final_state["llm_test_cases_feedback"])                     
+                   
                 with tab6:
                     st.write(final_state["llm_qa_feedback"])
                    

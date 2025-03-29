@@ -29,14 +29,14 @@ class SDLCWorkflowNode:
         return state 
 
     def product_owner_review(self, state: State):
-        """ No-op node that should be interrupted on """
+        """ LLM as product owner reviews the storeis """
         print("product_owner_review is called")
         #print("state=", state)
-        """LLM evaluates the blog"""
+        """LLM evaluates the user stories"""
         #Augment the LLM with schema for structured output
         evaluator = self.llm.with_structured_output(StoryFeedback)
         grade = evaluator.invoke(f"As a product owner evaluate the generated stories : {state['llm_generated_stories']}")
-        print("grade=",grade)
+        #print("grade=",grade)
         state["product_owner_accept_reject_stories"] = grade.grade 
         state["product_owner_stories_feedback"] = grade.feedback
         return state
@@ -50,8 +50,9 @@ class SDLCWorkflowNode:
         else:
             return "Rejected + Feedback"
 
-    # llm to generate details design or review and re-generate detaild design
+    
     def generate_detailed_design(self, state: State):
+        '''llm to generate details design or review and re-generate detaild design'''
         print("generate_detailed_design is called")
                 
         if(state["llm_accept_reject_design"]=="Rejected"):
@@ -66,19 +67,19 @@ class SDLCWorkflowNode:
         return state
     
     def llm_design_review(self, state: State):
+        """LLM evaluates the doc design"""
         print("llm_design_docs_review is called")
        
-        """LLM evaluates the doc design"""
         #Augment the LLM with schema for structured output
         evaluator = self.llm.with_structured_output(DesignFeedback)
         grade = evaluator.invoke(f"As an experienced software architect evaluate the project design : {state['llm_generated_design_docs']}")
-        print("grade=",grade)
+        #print("grade=",grade)
         state["llm_accept_reject_design"] = grade.grade 
         state["product_owner_stories_feedback"] = grade.feedback
         return state
 
     def llm_design_review_should_continue(self, state: State):
-        """ Return the next node to execute """
+        """ Return the next node to execute after the design review """
         print("llm_design_review_should_continue is called")
         
         llm_design_feedback = state.get('llm_accept_reject_design', None)
@@ -89,8 +90,8 @@ class SDLCWorkflowNode:
             return "Rejected + Feedback"
         
 
-    # llm to generate project code or review and re-generate project code
     def generate_project_code(self, state: State):
+        """llm to generate project code or review and re-generate project code"""
         print("generate_project_code is called : ",state["llm_accept_reject_code"])
        
         if(state["llm_accept_reject_code"]=="Rejected"):
@@ -105,12 +106,12 @@ class SDLCWorkflowNode:
         return state
     
     def llm_code_review(self, state: State):
-        """LLM evaluates the code """
+        """LLM evaluates the generated code """
         print("llm_code_review is called")
         #Augment the LLM with schema for structured output
         evaluator = self.llm.with_structured_output(CodeFeedback)
         grade = evaluator.invoke(f"As an experienced software developer review the project code : {state['llm_generated_code']}")
-        print("grade code=",grade)
+        #print("grade code=",grade)
         state["llm_accept_reject_code"] = grade.grade 
         state["llm_code_feedback"] = grade.feedback
         return state
@@ -130,7 +131,7 @@ class SDLCWorkflowNode:
         #Augment the LLM with schema for structured output
         evaluator = self.llm.with_structured_output(SecurityFeedback)
         grade = evaluator.invoke(f"As experienced security analyst review the project code and suggest improvements : {state['llm_generated_code']}")
-        print("grade security=",grade)
+        #print("grade security=",grade)
         state["llm_accept_reject_security"] = grade.grade 
         state["llm_security_feedback"] = grade.feedback
         return state
@@ -147,8 +148,9 @@ class SDLCWorkflowNode:
         """
         return "Accepted"
     
-    # llm to generate test cases or review and re-generate test cases
+    
     def generate_test_cases(self, state: State):
+        """" llm to generate test cases or review and re-generate test cases """
         print("generate_test_cases is called")
             
         if(state["llm_accept_reject_test_cases"]=="Rejected"):
@@ -168,7 +170,7 @@ class SDLCWorkflowNode:
         #Augment the LLM with schema for structured output
         evaluator = self.llm.with_structured_output(TestCaseFeedback)
         grade = evaluator.invoke(f"As an experienced QA enignner review the test cases : {state['llm_generated_test_cases']}")
-        print("grade test cases=",grade)
+        #print("grade test cases=",grade)
         state["llm_accept_reject_test_cases"] = grade.grade 
         state["llm_test_cases_feedback"] = grade.feedback
         return state
@@ -183,8 +185,9 @@ class SDLCWorkflowNode:
             return "Rejected + Feedback"
         
 
-    #llm to perform QA based on generated code and test cases
+    
     def llm_perform_qa_testing(self, state: State):
+        """"llm to perform qa testing based on generated test cases"""
         print("perform_qa_testing is called")
             
         sys_msg = SystemMessage(content="You are a experienced QA Engineer. Use your expertise, to perform QA testing of the provided project. The QA testing should be based on project code and test cases.")
@@ -194,8 +197,9 @@ class SDLCWorkflowNode:
         state["llm_qa_feedback"] = llm_response.content
         return state
     
-    #llm to generate instructions to deploy the project on docker/kubernetes env
+    
     def llm_deployment(self, state: State):
+        """#llm to generate instructions to deploy the project on docker/kubernetes environment"""
         print("llm_deployment is called")
             
         sys_msg = SystemMessage(content="You are a experienced DevOps Engineer. Use your expertise, to write detailed instructions to deploy the provided project code. Our perference of deployment is on Docker and Kubernetes envirnment.")
@@ -205,8 +209,8 @@ class SDLCWorkflowNode:
         state["llm_deploy_instructions"] = llm_response.content
         return state
     
-    #llm to generate instructions to monitor project after deployment
     def llm_monitoring(self, state: State):
+        """"llm to generate instructions to monitor project after deployment"""
         print("llm_monitoring is called")
             
         sys_msg = SystemMessage(content="You are a experienced DevOps Engineer. Use your expertise, to write detailed instructions on monitoring deployed app on docker and kubernetes environment. We want details about logs, alerts and oberserability setup.")

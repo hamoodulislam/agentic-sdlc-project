@@ -1,5 +1,4 @@
 from langgraph.graph import StateGraph, START,END, MessagesState
-from langgraph.prebuilt import tools_condition,ToolNode
 from langchain_core.prompts import ChatPromptTemplate
 from src.langgraphagenticai.state.state import State
 from src.langgraphagenticai.nodes.sdlc_node import SDLCWorkflowNode
@@ -15,9 +14,9 @@ class GraphBuilder:
 
     def basic_sdlc_build_graph(self):
         """
-        Builds a basic chatbot graph using LangGraph.
-        This method initializes a chatbot node using the `BasicChatbotNode` class 
-        and integrates it into the graph. The chatbot node is set as both the 
+        Builds a basic sdlc graph using LangGraph.
+        This method initializes a sdlc node using the `SDLCWorkflowNode` class 
+        and integrates it into the graph. The sdlc node is set as both the 
         entry and exit point of the graph.
         """
         self.basic_sdlc_node = SDLCWorkflowNode(self.llm)
@@ -41,7 +40,7 @@ class GraphBuilder:
         self.graph_builder.add_conditional_edges(
             "product_owner_review",
             self.basic_sdlc_node.product_owner_should_continue,
-            {  # if accepted then send to manger_feedback node else end the workflow
+            {  # if reivew accepted then send to generate_detailed_design node else send again to generate_user_stories
                 "Accepted": "generate_detailed_design",
                 "Rejected + Feedback": "generate_user_stories",
             },
